@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        #wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        #video {
+            width: 100%;
+        }
+
+        #timeline {
+            width: 100%;
+            position: relative;
+        }
+
+        #line-chart path {
+            fill: none;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+        path.line.disgust { stroke: #87B7B6 }
+        path.line.joy { stroke: #87B7B6 }
+        path.line.sadness { stroke: #5890FF }
+        path.line.fear { stroke: #07277a }
+        path.line.surprise { stroke: #6A5325 }
+        path.line.anger { stroke: #FAA06F }
+
+        #controls .control.disgust label { color: #87B7B6 }
+        #controls .control.joy { stroke: #87B7B6 }
+        #controls .control.sadness { stroke: #5890FF }
+        #controls .control.fear { stroke: #07277a }
+        #controls .control.surprise { stroke: #6A5325 }
+        #controls .control.anger { stroke: #FAA06F }
+
+        #cursor {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <ul>
+            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="disgust" class="disgust">disgust</label></li>
+            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="joy" class="joy">joy</label></li>
+            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="sadness" class="sadness">sadness</label></li>
+            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="fear" class="fear">fear</label></li>
+            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="surprise" class="surprise">surprise</label></li>
+            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="anger" class="anger">anger</label></li>
+        </ul>
+    </div>
+    <div id="wrapper">
+        <video id="video" controls>
+            <source src="gne.mp4">
+        </video>
+        <div id="timeline">
+            <svg id="line-chart"></svg>
+            <div id="cursor"></div>
+        </div>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.3.0/d3.min.js"></script>
+    <script>
+        var wrapper = $('#wrapper');
+        var width = wrapper.width();
+        var height = 100;
+        var svg = d3.select('#line-chart')
+                .attr('width', width)
+                .attr('height', height);
+
+        var x = d3.scaleLinear().domain([33, 547180]).range([0, width]);
+        var y = d3.scaleLinear().domain([0, height]).range([height, 0]);
+
+        var emotions = ['disgust', 'anger', 'joy', 'fear', 'surprise', 'sadness'];
+        var liners = {};
+        emotions.forEach(function(emotion) {
+            liners[emotion] = d3.line()
+                    .x(function(row) { return x(row.time) })
+                    .y(function(row) { return row.emotions ? y(row.emotions[emotion]) : 100 });
+        });
+        d3.json('emotions.json', function(data) {
+            for (var emotion in liners) {
+                var liner = liners[emotion];
+                svg.append('path')
+                        .attr('class', 'line ' + emotion)
+                        .attr('d', liner(data));
+            }
+        });
+
+        var cursor = document.getElementById('cursor');
+        var video = document.getElementById('video');
+        video.addEventListener('timeupdate', function(e) {
+            cursor.style.left = x(video.currentTime * 1000) + 'px';
+        });
+
+        var timeline = document.getElementById('timeline');
+        timeline.addEventListener('click', function(e) {
+            var rect = timeline.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var ratio = x / rect.width;
+            video.currentTime = video.duration * ratio;
+        });
+
+        function toggleLine(el) {
+            var emotion = el.getAttribute('data-emotion');
+            var line = $('path.line.' + emotion);
+            if (el.checked) {
+                line.show();
+            } else {
+                line.hide();
+            }
+        }
+    </script>
+    <script>
+
+    </script>
+</body>
+</html>
