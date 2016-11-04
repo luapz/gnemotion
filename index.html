@@ -28,12 +28,12 @@
         path.line.surprise { stroke: #6A5325 }
         path.line.anger { stroke: #FAA06F }
 
-        #controls .control.disgust label { color: #87B7B6 }
-        #controls .control.joy { stroke: #87B7B6 }
-        #controls .control.sadness { stroke: #5890FF }
-        #controls .control.fear { stroke: #07277a }
-        #controls .control.surprise { stroke: #6A5325 }
-        #controls .control.anger { stroke: #FAA06F }
+        #controls label.disgust { border: 1px solid #87B7B6 }
+        #controls label.joy { color: #87B7B6 }
+        #controls label.sadness { color: #5890FF }
+        #controls label.fear { color: #07277a }
+        #controls label.surprise { color: #6A5325 }
+        #controls label.anger { color: #FAA06F }
 
         #cursor {
             position: absolute;
@@ -48,12 +48,12 @@
 <body>
     <div id="controls">
         <ul>
-            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="disgust" class="disgust">disgust</label></li>
-            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="joy" class="joy">joy</label></li>
-            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="sadness" class="sadness">sadness</label></li>
-            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="fear" class="fear">fear</label></li>
-            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="surprise" class="surprise">surprise</label></li>
-            <li><label><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="anger" class="anger">anger</label></li>
+            <li><label class="disgust"><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="disgust">disgust</label></li>
+            <li><label class="joy"><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="joy">joy</label></li>
+            <li><label class="sadness"><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="sadness">sadness</label></li>
+            <li><label class="fear"><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="fear">fear</label></li>
+            <li><label class="surprise"><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="surprise">surprise</label></li>
+            <li><label class="anger"><input type="checkbox" checked onclick="toggleLine(this)" data-emotion="anger">anger</label></li>
         </ul>
     </div>
     <div id="wrapper">
